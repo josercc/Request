@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 public protocol APIConfig {
     /// 请求的方法默认为`get`

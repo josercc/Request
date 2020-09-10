@@ -6,25 +6,29 @@
 //  Copyright © 2020 zhanghang. All rights reserved.
 //
 
-@_exported import Alamofire
-@_exported import CleanJSON
+import Alamofire
+import CleanJSON
 import Foundation
 
-public struct API {
+public protocol API: AnyObject {
     /// 设置请求的`Host` 如果在`Xcode`中设置变量`HOST`则优先使用变量`HOST`,否则就使用设置的请求`host`
-    public static var host:Host = .default
+    static var host:String {get}
     /// 设置请求的`Mock` 如果在对应接口开启了`mock`则优先使用`mock`
-    public static var mock:Host = .default
+    static var mock:String {get}
     /// 配置默认`Headers`
     /// - headers: 当前请求`header`
-    public static var defaultHeadersConfig:((_ headers:inout HTTPHeaders) -> Void)?
-    private static var url:String = {
+    static var defaultHeadersConfig:((_ headers:inout HTTPHeaders) -> Void)? {get}
+}
+
+
+extension API {
+    static var url:String {
         if let host = ProcessInfo.processInfo.environment["HOST"] {
             return host
         } else {
-            return host.rawValue
+            return self.host
         }
-    }()
+    }
     /// 获取启动`Mock`本地配置
     public static var mockSettings:[MockSetting] {
         get {
@@ -48,7 +52,7 @@ public struct API {
     private static func requestURL(path:String) -> String {
         for setting in mockSettings {
             if setting.path == path, setting.open {
-                return mock.rawValue
+                return self.mock
             }
         }
         return url
@@ -57,7 +61,7 @@ public struct API {
     /// 保存支持`mock`的请求路径
     /// - Parameter path: 请求的路径
     private static func saveMockPath(path:String) {
-        var list = API.mockSettings
+        var list = self.mockSettings
         var isCanAdd = true
         for setting in list {
             if setting.path == path {
@@ -67,7 +71,7 @@ public struct API {
         }
         if isCanAdd {
             list.append(MockSetting(path: path, open: false))
-            API.mockSettings = list
+            self.mockSettings = list
         }
     }
     
@@ -178,29 +182,14 @@ public struct API {
     }
 }
 
-extension API {
-    /// 配置请求的`Host`
-    public struct Host: RawRepresentable {
-        public var rawValue: String
-        public init(rawValue: String) {
-            self.rawValue = rawValue
-        }
-        /// 默认的请求地址为空
-        static let `default` = Host(rawValue: "")
+public struct MockSetting:Codable {
+    public init(path: String, open: Bool) {
+        self.path = path
+        self.open = open
     }
-}
-
-extension API {
-    /// mock数据模型
-    public struct MockSetting:Codable {
-        public init(path: String, open: Bool) {
-            self.path = path
-            self.open = open
-        }
-        /// 请求的路径
-        public let path:String
-        /// 是否打开Mock数据
-        public let open:Bool
-    }
+    /// 请求的路径
+    public let path:String
+    /// 是否打开Mock数据
+    public let open:Bool
 }
 
