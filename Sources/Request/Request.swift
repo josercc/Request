@@ -170,7 +170,10 @@ extension API {
                 success(model)
             } else if let failure = failure {
                 let code = model._code
-                let message = model._message
+                var message = model._message
+                if message.count == 0, let resultString = String(data: data, encoding: .utf8) {
+                    message = resultString
+                }
                 failure(code,message)
             }
         } catch (let error) {
