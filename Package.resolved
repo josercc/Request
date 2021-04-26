@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Alamofire",
+        "repositoryURL": "http://gitlab.synology.me/app/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "a81ce74b56c1b5e4fa81cb474d8cc97b6d182e63",
+          "version": "5.2.2"
+        }
+      },
+      {
+        "package": "CleanJSON",
+        "repositoryURL": "http://gitlab.synology.me/app/CleanJSON.git",
+        "state": {
+          "branch": null,
+          "revision": "cb5fa7d7f20c263dd46bbb31d4bfefed3a3201bb",
+          "version": "1.0.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
