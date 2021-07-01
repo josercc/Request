@@ -5,7 +5,7 @@
 ## 安装
 
 ```swift
-.Package(url: "http://pineal.ai:30000/pineal-ios/sub-modules/Request.git", from: "2.0.0")
+.Package(url: "http://gitlab.synology.me/app/Request.git", from: "2.0.0")
 ```
 
 ## 使用
