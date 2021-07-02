@@ -19,11 +19,17 @@ public protocol APIConfig {
     var headers:[String:String]? {get}
     /// 请求的参数编码 默认`get`方法为`URLEncoding.default`, `post`为`JSONEncoding.default`
     var encoding:ParameterEncoding? { get }
+    /// 文件上传的后缀 默认为`.png`
+    var fileExtension:String { get }
+    /// 上传文件的进度
+    var uploadProgress:((Progress) -> Void)? { get }
 }
 
-extension APIConfig {
-    public var method:HTTPMethod {.get}
-    public var parameters:[String:Any]? {nil}
-    public var headers:[String:String]? {nil}
-    public var encoding:ParameterEncoding? { nil }
+public extension APIConfig {
+    var method:HTTPMethod {.get}
+    var parameters:[String:Any]? {nil}
+    var headers:[String:String]? {nil}
+    var encoding:ParameterEncoding? { nil }
+    var fileExtension:String { ".png" }
+    var uploadProgress:((Progress) -> Void)? { nil }
 }

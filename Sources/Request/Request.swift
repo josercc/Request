@@ -91,7 +91,7 @@ extension API {
         """
         print(requestContent)
         AF.upload(multipartFormData: { (multipartFormData) in
-            let fileName = "\(Int(Date().timeIntervalSince1970)).png"
+            let fileName = "\(Int(Date().timeIntervalSince1970))\(config.fileExtension)"
             multipartFormData.append(fileData, withName: "file", fileName: fileName)
             let path = "iOS/\(fileName)"
             if let pathData = path.data(using: .utf8) {
@@ -99,6 +99,8 @@ extension API {
             }
         }, to: "\(url)\(config.path)", method: config.method, headers: headers).responseString { (response) in
             didReviceResponse(type: type, response: response, success: success, failure: failure)
+        }.uploadProgress { progress in
+            config.uploadProgress?(progress)
         }
     }
     
