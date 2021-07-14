@@ -72,7 +72,12 @@ extension API {
         
         """
         print(requestContent)
-        AF.request("\(url)\(config.path)", method: config.method, parameters: config.parameters, encoding: encoding, headers: headers).responseString { (response) in
+        AF.request("\(url)\(config.path)",
+                   method: config.method,
+                   parameters: config.parameters,
+                   encoding: encoding,
+                   headers: headers)
+            .responseString { (response) in
             didReviceResponse(type: type, response: response, success: success, failure: failure)
         }
     }
@@ -97,7 +102,11 @@ extension API {
             if let pathData = path.data(using: .utf8) {
                 multipartFormData.append(pathData, withName: "filePath")
             }
-        }, to: "\(url)\(config.path)", method: config.method, headers: headers).responseString { (response) in
+        },
+        to: "\(url)\(config.path)",
+        method: config.method,
+        headers: headers,
+        requestModifier: {$0.timeoutInterval = 5 * 60}).responseString { (response) in
             didReviceResponse(type: type, response: response, success: success, failure: failure)
         }.uploadProgress { progress in
             config.uploadProgress?(progress)
