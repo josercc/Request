@@ -2,6 +2,19 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import Foundation
+
+let urlForAlamofire:String
+let urlForCleanJSON:String
+if let value = ProcessInfo.processInfo.environment["isGiteeMirror"],
+   let isGiteeMirror = Bool(value),
+   isGiteeMirror {
+    urlForAlamofire = "https://gitee.com/mirrors/alamofire.git"
+    urlForCleanJSON = "https://gitee.com/daveeapp/CleanJSON.git"
+} else {
+    urlForAlamofire = "https://github.com/Alamofire/Alamofire.git"
+    urlForCleanJSON = "https://github.com/Pircate/CleanJSON.git"
+}
 
 let package = Package(
     name: "Request",
@@ -16,8 +29,8 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "http://gitlab.synology.me/app/Alamofire.git", from: "5.2.2"),
-        .package(url: "http://gitlab.synology.me/app/CleanJSON.git", from: "1.0.4")
+        .package(name:"Alamofire", url: urlForAlamofire, from: "5.0.0"),
+        .package(url: urlForCleanJSON, from: "1.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

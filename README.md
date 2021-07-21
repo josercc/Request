@@ -1,135 +1,42 @@
 # Request
 
-一个基于八斗资讯提炼出来请求库，支持普通数据请求和上传文件。目前八斗资讯和数据收集系统都是用这个库开发的。
+一个基于`Alamofire`库支持请求和数据上传的简单网络请求框架。
+
+## Overview
+
+`Request`请求库是基于单个请求配置，去发起请求，做相应的数据返回处理的网络处理框架。
+单个请求配置区别于`Alamofire`直接请求的好处是，创建对应请求的配置文件。可以提前对于请求的参数进行验证，修饰等。对于多地方重用和团队合作使用，请求逻辑更加集中。
+单个请求配置对于请求的可扩展和接口的升级和维护比传统的增强了不少。
 
 ## 安装
-
+### Swift Package Manager
 ```swift
-.Package(url: "http://gitlab.synology.me/app/Request.git", from: "2.0.0")
+    .package(url: "https://github.com/josercc/Request.git", from: "2.0.0")
 ```
+> 目前只支持了`Swift Package Manager`的安装
 
 ## 使用
 
-新建一个`Class`实现`API`协议
-
+比如我们基于`https://www.xxx.com`域名进行说明，那么我们需要创建一个`API`协议的配置。
 ```swift
-public protocol API: AnyObject {
-    /// 设置请求的`Host` 如果在`Xcode`中设置变量`HOST`则优先使用变量`HOST`,否则就使用设置的请求`host`
-    static var host:String {get}
-    /// 设置请求的`Mock` 如果在对应接口开启了`mock`则优先使用`mock`
-    static var mock:String {get}
-    /// 配置默认`Headers`
-    /// - headers: 当前请求`header`
-    static var defaultHeadersConfig:((_ headers:inout HTTPHeaders) -> Void)? {get}
-}
+    class SampleApi: API {
+        
+    }
+```
+### 设置域名
+
+我们实现`API`协议的`host`属性,值得注意的是。框架内部做了环境变量的支持，如果环境变量设置了`HOST`值，则优先读取`HOST`的值作为请求的域名。
+```swift
+    class SampleApi: API {
+        static var host: String {"https://www.xxx.com"}
+    }
 ```
 
-例子
+### 例子1
 
-> ```swift
-> public class PinealAiApi: API {
->     public static var host: String {
->         #if DEBUG
->         return "[DEBUG HOST]"
->         #else
->         return "[RELEASE HOST]"
->         #endif
->     }
->     public static var mock: String { "[MOCK HOST]" }
->     public static var defaultHeadersConfig: ((inout HTTPHeaders) -> Void)? {
->         return { (header:inout HTTPHeaders) in
->             var headers:[String:String] = [:]
-> 
->             if let defaultHeadersConfig:(() -> [String:String]) = ControllerCenter.center.get(globaleParameter: "defaultHeadersConfig") {
->                 headers = defaultHeadersConfig()
->             }
->             for (key,value) in headers {
->                 header.add(name: key, value: value)
->             }
->         }
->     }
-> }
-> ```
-
-新建一个`Struct`或者`Class`实现`Model`协议
-
+比如发送一个`GET`的网络请求
 ```swift
-public protocol Model:Codable {
-    /// 接口是否成功
-    var _isSuccess:Bool {get}
-    /// 接口状态吗
-    var _code:Int {get}
-    /// 接口返回信息
-    var _message:String {get}
-}
+    https://www.xxx.com/api/json?name=josercc
 ```
-
-例子
-
-> ```swift
-> public struct BaseModel<T:Codable> :Model {
->     public var _isSuccess: Bool {self.code == 0}
->     public var _code: Int {self.code}
->     public var _message: String {self.message}
->     
->     public let message:String
->     public let code:Int
->     public let success:Bool
->     public let data:T?
-> }
-> ```
-
-每个对应接口实现`APIConfig`协议
-
-```swift
-public protocol APIConfig {
-    /// 请求的方法默认为`get` 可选
-    var method:HTTPMethod {get}
-    /// 请求的路径
-    var path:String {get}
-    /// 请求的参数 可选
-    var parameters:[String:Any]? {get}
-    /// 请求的头部 可选
-    var headers:[String:String]? {get}
-    /// 请求的参数编码 默认`get`方法为`URLEncoding.default`, `post`为`JSONEncoding.default` 可选
-    var encoding:ParameterEncoding? { get }
-}
-```
-
-例子
-
-> ```swift
-> public struct AutoIssuer:APIConfig {
->     public var path: String { "/bond/autoIssuer" }
->     public var parameters: [String : Any]?
->     struct Parameter:Encodable {
->         let keyWord:String
->     }
->     /// 根据搜索的内容获取关联的债券发行人的名称
->     /// - Parameters:
->     ///   - keyWord: 搜索的名称
->     ///   - success: 成功的回掉
->     ///   - failure: 失败的回掉
->     public static func request(keyWord:String,
->                                success:@escaping(([String]?) -> Void),
->                                failure:@escaping((Int,String) -> Void)) {
->         let parameter = Parameter(keyWord: keyWord)
->         let api = AutoIssuer(parameters: parameter.toParameters())
->         PinealAiApi.request(type: BaseModel<[String]>.self, config: api, success: { (model) in
->             success(model.data)
->         }, failure: failure)
->     }
-> }
-> ```
-
-将一个`Encodable`转换为字典
-
-```swift
-extension Encodable {
-
-    /// 将一个`Encodable`编码为字典
-    /// - Returns: 参数字典
-    public func toParameters() -> [String : Any]?
-}
-```
+我们需要创建对应的网络请求配置
 

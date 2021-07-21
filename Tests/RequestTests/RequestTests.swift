@@ -12,3 +12,9 @@ final class RequestTests: XCTestCase {
         ("testExample", testExample),
     ]
 }
+
+class SampleApi: API {
+    static var defaultHeadersConfig: ((inout HTTPHeaders) -> Void)?
+    static var host: String {"https://www.xxx.com"}
+}
+
