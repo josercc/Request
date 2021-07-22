@@ -11,7 +11,7 @@
 ## 安装
 ### Swift Package Manager
 ```swift
-    .package(url: "https://github.com/josercc/Request.git", from: "2.0.0")
+.package(url: "https://github.com/josercc/Request.git", from: "2.0.0")
 ```
 > 目前只支持了`Swift Package Manager`的安装
 
@@ -19,24 +19,68 @@
 
 比如我们基于`https://www.xxx.com`域名进行说明，那么我们需要创建一个`API`协议的配置。
 ```swift
-    class SampleApi: API {
-        
-    }
+class SampleApi: API {
+
+}
 ```
 ### 设置域名
 
 我们实现`API`协议的`host`属性,值得注意的是。框架内部做了环境变量的支持，如果环境变量设置了`HOST`值，则优先读取`HOST`的值作为请求的域名。
 ```swift
-    class SampleApi: API {
-        static var host: String {"https://www.xxx.com"}
-    }
+class SampleApi: API {
+    static var host: String {"https://www.xxx.com"}
+}
 ```
 
-### 例子1
+### 例子
 
 比如发送一个`GET`的网络请求
 ```swift
-    https://www.xxx.com/api/json?name=josercc
+https://www.xxx.com/api/json?name=josercc
 ```
 我们需要创建对应的网络请求配置
 
+```swift
+class SampleRequest: API {
+    static var defaultHeadersConfig: ((inout HTTPHeaders) -> Void)?
+    static var host: String {"https://www.xxx.com"}
+}
+```
+
+我们创建一个请求的配置文件
+
+```swift
+struct SampleApi:APIConfig {
+    var path: String {"/api/json"}
+    var parameters: [String : Any]? {
+        [
+            "name":"josercc"
+        ]
+    }
+}
+```
+
+我们还需要创建一个模型
+
+```swift
+struct SampleModel:Model {
+    var _isSuccess: Bool {self._code == 0}
+    var _code: Int {0}
+    var _message: String {"success"}
+}
+```
+
+这个模型需要根据实际返回需求来，这里就只是演示一下。
+
+现在你就可以这样的发起请求了
+
+```swift
+SampleRequest.request(type: SampleModel.self,
+                      config: SampleApi()) { model in
+
+} failure: { code, message in
+
+}
+```
+
+更新的详细信息请查阅[接口文档](https://josercc.github.io/Request)

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request - APIConfig</title>
+    <link rel="stylesheet" type="text/css" href="/Request/all.css" media="all" />
+</head>
+<body>
+    <header>
+        <a href="/Request/">
+            <strong>
+                Request
+            </strong>
+            <span>Documentation</span>
+        </a>
+    </header>
+
+    <!--
+    <form class="search">
+        <input type="search" placeholder="Search" />
+    </form>
+    -->
+
+    <nav>
+        <div class="wrapper">
+            <h2>On This Page</h2>
+            <ol><li><a href="#default implementations">Default Implementations</a><ul><li class="variable"><a href="#apiconfig.method">method</a></li><li class="variable"><a href="#apiconfig.parameters">parameters</a></li><li class="variable"><a href="#apiconfig.headers">headers</a></li><li class="variable"><a href="#apiconfig.encoding">encoding</a></li><li class="variable"><a href="#apiconfig.fileextension">file​Extension</a></li><li class="variable"><a href="#apiconfig.uploadprogress">upload​Progress</a></li><li class="variable"><a href="#apiconfig.multipartformdata">multipart​Form​Data</a></li></ul></li><li><a href="#requirements">Requirements</a><ul><li class="variable"><a href="#apiconfig.method">method</a></li><li class="variable"><a href="#apiconfig.path">path</a></li><li class="variable"><a href="#apiconfig.parameters">parameters</a></li><li class="variable"><a href="#apiconfig.headers">headers</a></li><li class="variable"><a href="#apiconfig.encoding">encoding</a></li><li class="variable"><a href="#apiconfig.fileextension">file​Extension</a></li><li class="typealias"><a href="#apiconfig.uploadprogresshandle">Upload​Progress​Handle</a></li><li class="variable"><a href="#apiconfig.uploadprogress">upload​Progress</a></li><li class="typealias"><a href="#apiconfig.multipartformdatahandle">Multipart​Form​Data​Handle</a></li><li class="variable"><a href="#apiconfig.multipartformdata">multipart​Form​Data</a></li></ul></li></ol>
+        </div>
+    </nav>
+
+    <main>
+        <article>
+            <h1>
+    <small>Protocol</small>
+    <code class="name">APIConfig</code>
+</h1>
+
+<div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">protocol</span> <span class="type">APIConfig</span>  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>请求<code>API</code>的设置</p>
+
+</div>
+<div class="discussion">
+    <p>我们需要将实现这个协议，重写一些属性完成我们请求的配置。这个协议会默认实现一个简单的请求，请求方式为<code>GET</code>，没有任何参数，没有任何<code>Header</code>参数。</p>
+
+<p>默认<code>GET</code>请求参数编码为<code>URLEncoding.default</code>,<code>POST</code>的请求参数编码为<code>JSONEncoding.default</code></p>
+
+<p>上传文件的默认后缀名称为<code>.png</code></p>
+
+<p>比如一个简单的<code>GET</code>的请求<code>https://xxx.xxx.com/api/json?name=josercc</code></p>
+
+<html><body><pre class="highlight"><code>    <span class="keyword">struct</span> <span class="type">SampleApi</span>: <span class="type">APIConfig</span> {
+        <span class="keyword">var</span> <span class="variable">path</span>: <span class="type">String</span> { <span class="string literal">"</span><span class="string literal">/api/json</span><span class="string literal">"</span> }
+        <span class="keyword">var</span> <span class="variable">parameters</span>: [<span class="type">String</span> : <span class="keyword">Any</span>] {
+            [
+                <span class="string literal">"</span><span class="string literal">name</span><span class="string literal">"</span>:<span class="string literal">"</span><span class="string literal">josercc</span><span class="string literal">"</span>
+            ]
+        }
+    }
+</code></pre></body></html>
+</div>
+
+    <section id="default implementations">
+        <h2>Default Implementations</h2>
+
+        <div role="article" class="variable" id="apiconfig.method">
+    <h3>
+        <code><a href="#apiconfig.method">method</a></code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">method</span>:<span class="type">HTTPMethod</span>  </body></html></code></pre>
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.parameters">
+    <h3>
+        <code><a href="#apiconfig.parameters">parameters</a></code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">parameters</span>:[<span class="type">String</span>:<span class="keyword">Any</span>]?  </body></html></code></pre>
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.headers">
+    <h3>
+        <code><a href="#apiconfig.headers">headers</a></code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">headers</span>:[<span class="type">String</span>:<span class="type">String</span>]?  </body></html></code></pre>
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.encoding">
+    <h3>
+        <code><a href="#apiconfig.encoding">encoding</a></code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">encoding</span>:<span class="type">ParameterEncoding</span>?  </body></html></code></pre>
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.fileextension">
+    <h3>
+        <code><a href="#apiconfig.fileextension">file​Extension</a></code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">fileExtension</span>:<span class="type">String</span>  </body></html></code></pre>
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.uploadprogress">
+    <h3>
+        <code><a href="#apiconfig.uploadprogress">upload​Progress</a></code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">uploadProgress</span>:((<span class="type">Progress</span>) -&gt; <span class="type">Void</span>)?  </body></html></code></pre>
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.multipartformdata">
+    <h3>
+        <code><a href="#apiconfig.multipartformdata">multipart​Form​Data</a></code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">multipartFormData</span>:<span class="type">MultipartFormDataHandle</span>?  </body></html></code></pre>
+</div>
+</div>
+    </section>
+
+
+    <section id="requirements">
+        <h2>Requirements</h2>
+
+        <div role="article" class="variable" id="apiconfig.method">
+    <h3>
+        <code>method</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">method</span>:<span class="type">HTTPMethod</span>  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>请求的方法默认为<code>get</code>
+更多的支持的请求方式请查看<code>HTTPMethod</code>相关信息</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.path">
+    <h3>
+        <code>path</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">path</span>:<span class="type">String</span>  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>请求的路径
+需要和<code>API.host</code>组成一个请求链接
+比如<code>https://xxx.xxx.com/api/json?name=josercc</code>
+如果设置<code>API.hos=https://xxx.xxx.com</code>，那么此时的<code>path=&quot;/api/json&quot;</code>
+如果设置<code>API.hos=https://xxx.xxx.com/</code>，那么此时的<code>path=&quot;api/json&quot;</code></p>
+
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.parameters">
+    <h3>
+        <code>parameters</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">parameters</span>:[<span class="type">String</span>:<span class="keyword">Any</span>]?  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>请求的参数
+如果请求为<code>GET</code>则为<code>Path Parameter</code>
+如果请求为<code>POST</code>则为<code>Body Parameter</code></p>
+
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.headers">
+    <h3>
+        <code>headers</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">headers</span>:[<span class="type">String</span>:<span class="type">String</span>]?  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>请求的头部
+设置公共的头部信息请在<code>API.defaultHeadersConfig</code>进行设置</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.encoding">
+    <h3>
+        <code>encoding</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">encoding</span>:<span class="type">ParameterEncoding</span>?  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>请求的参数编码 默认<code>get</code>方法为<code>URLEncoding.default</code>, <code>post</code>为<code>JSONEncoding.default</code></p>
+
+</div>
+</div>
+<div role="article" class="variable" id="apiconfig.fileextension">
+    <h3>
+        <code>file​Extension</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">fileExtension</span>:<span class="type">String</span>  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>文件上传的后缀 默认为<code>.png</code></p>
+
+</div>
+</div>
+<div role="article" class="typealias" id="apiconfig.uploadprogresshandle">
+    <h3>
+        <code>Upload​Progress​Handle</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">typealias</span> <span class="variable">UploadProgressHandle</span> = (<span class="keyword">_</span> <span class="variable">progress</span>:<span class="type">Progress</span>) -&gt; <span class="type">Void</span></body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>上传进度的回掉</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>progress</th>
+    <td></td>
+    <td><p>上传的当前进度</p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="variable" id="apiconfig.uploadprogress">
+    <h3>
+        <code>upload​Progress</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">uploadProgress</span>:<span class="type">UploadProgressHandle</span>?  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>上传文件的进度</p>
+
+</div>
+</div>
+<div role="article" class="typealias" id="apiconfig.multipartformdatahandle">
+    <h3>
+        <code>Multipart​Form​Data​Handle</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">typealias</span> <span class="variable">MultipartFormDataHandle</span> = (<span class="keyword">_</span> <span class="variable">multipartFormData</span>:<span class="type">MultipartFormData</span>) -&gt; <span class="type">Void</span></body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>上传文件设置自定义参数的回掉</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>multipart​Form​Data</th>
+    <td></td>
+    <td><p>上传文件<code>MultipartFormData</code>对象</p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="variable" id="apiconfig.multipartformdata">
+    <h3>
+        <code>multipart​Form​Data</code>
+    </h3>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">var</span> <span class="variable">multipartFormData</span>:<span class="type">MultipartFormDataHandle</span>?  </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>设置自定义上传</p>
+
+</div>
+</div>
+    </section>
+        </article>
+    </main>
+
+    <footer>
+        <p>
+    Generated on <time datetime="2021-07-22T20:29:52+0800">July 22, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
+</p>
+    </footer>
+</body>
+</html>

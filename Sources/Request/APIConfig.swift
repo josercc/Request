@@ -69,4 +69,5 @@ public extension APIConfig {
     var encoding:ParameterEncoding? { nil }
     var fileExtension:String { ".png" }
     var uploadProgress:((Progress) -> Void)? { nil }
+    var multipartFormData:MultipartFormDataHandle? {nil}
 }
