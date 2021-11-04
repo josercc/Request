@@ -54,6 +54,22 @@ extension API {
     /// - Parameter message: 错误的原因
     public typealias RequestFailureHandle = (_ code:Int, _ message:String) -> Void
     
+    @available(iOS 15.0.0, *)
+    @available(macOS 12.0.0, *)
+    public static func request<M:Model, A:APIConfig>(type:M.Type,
+                                                     config:A) async throws -> M {
+        try await withCheckedThrowingContinuation({ continuation in
+            request(type: type, config: config, success: { model in
+                continuation.resume(returning: model)
+            }, failure: { code, message in
+                continuation.resume(throwing: NSError(domain: message,
+                                                      code: code,
+                                                      userInfo: nil))
+            })
+        })
+    }
+    
+    
     /// 发起一个请求（成功和失败回掉设置为可选值，是为了允许只发送请求不需要关心成功还是失败）
     /// - Parameter type: 请求的模型类型
     /// - Parameter config: 发起请求的实例(基于`APIConfig`协议的对象)
@@ -100,6 +116,22 @@ extension API {
                                                response: $0,
                                                success: success,
                                                failure: failure)}
+    }
+    
+    @available(iOS 15.0.0, *)
+    @available(macOS 12.0.0, *)
+    public static func uploadFile<M:Model, A:APIConfig>(type:M.Type,
+                                                        config:A,
+                                                        fileData:Data) async throws -> M {
+        try await withCheckedThrowingContinuation({ continuation in
+            uploadFile(type: type, config: config, fileData: fileData, success: { model in
+                continuation.resume(returning: model)
+            }, failure: { code, message in
+                continuation.resume(throwing: NSError(domain: message,
+                                                      code: code,
+                                                      userInfo: nil))
+            })
+        })
     }
     
     /// 上传文件服务

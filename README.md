@@ -83,4 +83,15 @@ SampleRequest.request(type: SampleModel.self,
 }
 ```
 
+async/await的支持（2.3版本之后）
+
+```swift
+do {
+    let model = try await SampleRequest.request(type:SampleModel.self, config)
+    print(model)
+}catch(e:NSError) {
+    print("code:\(e.code) message:\(e.message)")
+}
+```
+
 更新的详细信息请查阅[接口文档](https://josercc.github.io/Request)
