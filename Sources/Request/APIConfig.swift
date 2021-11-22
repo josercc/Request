@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import CleanJSON
 
 /// 请求`API`的设置
 ///
@@ -60,6 +61,8 @@ public protocol APIConfig {
     typealias MultipartFormDataHandle = (_ multipartFormData:MultipartFormData) -> Void
     /// 设置自定义上传
     var multipartFormData:MultipartFormDataHandle? {get}
+    /// 解析器
+    var decoder: JSONDecoder {get}
 }
 
 public extension APIConfig {
@@ -70,4 +73,5 @@ public extension APIConfig {
     var fileExtension:String { ".png" }
     var uploadProgress:((Progress) -> Void)? { nil }
     var multipartFormData:MultipartFormDataHandle? {nil}
+    var decoder: JSONDecoder { CleanJSONDecoder() }
 }

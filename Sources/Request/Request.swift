@@ -114,6 +114,7 @@ extension API {
                    headers: headers)
             .responseString {didReviceResponse(type: type,
                                                response: $0,
+                                               decoder: config.decoder,
                                                success: success,
                                                failure: failure)}
     }
@@ -184,6 +185,7 @@ extension API {
                   requestModifier: {$0.timeoutInterval = 5 * 60})
             .responseString{didReviceResponse(type: type,
                                               response: $0,
+                                              decoder: config.decoder,
                                               success: success,
                                               failure: failure)}
             .uploadProgress {config.uploadProgress?($0)}
@@ -209,8 +211,9 @@ extension API {
     /// - Parameter response: 请求响应
     /// - Parameter success: 请求成功的回掉
     /// - Parameter failure: 请求失败的回掉
-    private static func didReviceResponse<M:Model>(type:M.Type,
+    private static func didReviceResponse<M:Model, Decoder:JSONDecoder>(type:M.Type,
                                                    response:AFDataResponse<String>,
+                                                   decoder:Decoder,
                                                    success:RequestSuccessHandle<M>?,
                                                    failure:RequestFailureHandle?) {
         /// 如果获取相应失败 则返回异常
@@ -236,7 +239,7 @@ extension API {
         }
         do {
             /// 尝试将返回的数据进行模型解析 如果解析失败 则返回解析失败的提示
-            let model = try CleanJSONDecoder().decode(type, from: data)
+            let model = try decoder.decode(type, from: data)
             /// 如果成功 则返回对应的模型信息 失败则返回对应失败信息
             if let success = success, model._isSuccess {
                 success(model)
