@@ -54,8 +54,7 @@ extension API {
     /// - Parameter message: 错误的原因
     public typealias RequestFailureHandle = (_ code:Int, _ message:String) -> Void
     
-    @available(iOS 15.0.0, *)
-    @available(macOS 12.0.0, *)
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public static func request<M:Model, A:APIConfig>(type:M.Type,
                                                      config:A) async throws -> M {
         try await withCheckedThrowingContinuation({ continuation in
